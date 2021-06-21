@@ -16,8 +16,8 @@ finestr = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05.chun
 treexml<-xmlTreeParse(finestr)
 ttree<-extractTree(treexml)
 
-chunkcount = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05_combine.chunkcounts.out"
-data_chunks = read.table(chunkcount, header = T, row.names = 1)
+chunklength = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05_combine.chunklengths.out"
+data_chunks = read.table(chunklength, header = T, row.names = 1)
 
 #Normalization step
 data_chunks_norm = t(apply(data_chunks, 1, function(x) x/sum(x)))
