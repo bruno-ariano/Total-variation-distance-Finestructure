@@ -9,21 +9,22 @@ library(readr)
 library(ape)
 library(phytools)
 library(geiger)
+#This library was taken from the Finestructure website
 source("/home/bruno/Genomics_folder/Software/fs_4.1.1/FinestructureLibrary.R")
 
 finestr = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05.chunkcount.x100k_y100k.mcmc.T.k2.tree"
-treexml<-xmlTreeParse(finestr) ## read the tree as xml format
-ttree<-extractTree(treexml) ## extract the tree into ape's phylo format
+treexml<-xmlTreeParse(finestr)
+ttree<-extractTree(treexml)
 
-chunklength = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05_combine.chunkcounts.out"
-data_chunks = read.table(chunklength,header = T, row.names = 1)
+chunkcount = "/home/bruno/Genomics_folder/Chromopainter/last_run/n563_M9.50e05_combine.chunkcounts.out"
+data_chunks = read.table(chunkcount, header = T, row.names = 1)
 
 #Normalization step
 data_chunks_norm = t(apply(data_chunks, 1, function(x) x/sum(x)))
 
 
 ###### To define groups I cut the tree at arbitrary poit using the treeSlice function
-tree_sliced = treeSlice(ttree,prompt = T)
+tree_sliced = treeSlice(ttree, prompt = T)
 
 root_nodes = c()
 for(record in tree_sliced){
