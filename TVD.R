@@ -25,7 +25,10 @@ data_chunks_norm = t(apply(data_chunks, 1, function(x) x/sum(x)))
 
 ###### To define groups I cut the tree at arbitrary poit using the treeSlice function
 tree_sliced = treeSlice(ttree, prompt = T)
+#In case the above code give error use the below (slice indicate where you want to cut the tree)
+#treeSlice(ttree,prompt = F,slice = 120000) 
 
+                           
 root_nodes = c()
 for(record in tree_sliced){
   root_nodes = c(root_nodes, findMRCA(ttree, tip = record$tip.label))
@@ -49,7 +52,7 @@ for(i in seq(ncol(combn_nodes))){
   
   tvd = 0.5 * sum(abs(copy_vect1 - copy_vect2))
   
-  #I create 200 random groups by sampling from the two above ones
+  #I create 200 random groups by sampling from the two above ones. Depending on the size of the groups you might want to increase this number
   tvd_random = c()
   all_label = c(tree1$tip.label, tree2$tip.label)
   for(j in seq(200)){
