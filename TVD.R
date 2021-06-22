@@ -41,29 +41,40 @@ combn_nodes = combn(root_nodes, 2)
 list_group = c()
 list_group_random = c()
 
+                           
+make_copy_vector = function(matrix_chunk, label_group1, label_group2){
+  #First I extract the matrix with the labels for each group
+  group_matrix = data_chunks_norm[label_group1,]
+  #I average by row
+  group_matrix_mean = apply(group_matrix,2,mean)
+  #Then I sum all columns(Donors)
+  Donors_sum_group1 = sum(group_matrix_mean[label_group1])
+  Donors_sum_group2 = sum(group_matrix_mean[label_group2])
+  copy_vector1 = c(Donors_sum_group1, Donors_sum_group2)
+  
+  group_matrix2 = data_chunks_norm[label_group2,]
+  group_matrix_mean2 = apply(group_matrix2,2,mean)
+  Donors_sum_group1 = sum(group_matrix_mean2[label_group1])
+  Donors_sum_group2 = sum(group_matrix_mean2[label_group2])
+  copy_vector2 = c(Donors_sum_group1, Donors_sum_group2)
+  return(list(copy_vector1,copy_vector2))
+}
+                           
+                                                  
 for(i in seq(ncol(combn_nodes))){
   tree1 = extract.clade(ttree,combn_nodes[1,i])
-  group_matrix1 = data_chunks_norm[tree1$tip.label,]
-  copy_vect1 = apply(group_matrix1,2,mean)
-  
   tree2 = extract.clade(ttree,combn_nodes[2,i])
-  group_matrix2 = data_chunks_norm[tree2$tip.label,]
-  copy_vect2 = apply(group_matrix2,2,mean)
+  copy_vect = make_copy_vector(data_chunks_norm, tree1$tip.label, tree2$tip.label)
+  tvd = 0.5 * sum(abs(copy_vect[[1]] - copy_vect[[2]]))
   
-  tvd = 0.5 * sum(abs(copy_vect1 - copy_vect2))
-  
-  #I create 200 random groups by sampling from the two above ones. Depending on the size of the groups you might want to increase this number
+  #I create 200 random groups by sampling from the two above ones. Depending on the clusters size you might want to increase the permutation number.
   tvd_random = c()
   all_label = c(tree1$tip.label, tree2$tip.label)
   for(j in seq(200)){
     group1_label_rand = sample(all_label, length(tree1$tip.label))
     group2_label_rand = all_label[!all_label %in% group1_label_rand]
-    group_rand_matrix1 = data_chunks_norm[group1_label_rand,]
-    group_rand_matrix2 = data_chunks_norm[group2_label_rand,]
-    copy_rand_vect1 = apply(group_rand_matrix1,2,mean)
-    copy_rand_vect2 = apply(group_rand_matrix2,2,mean)
-    tvd_random = c(tvd_random, 0.5 * sum(abs(copy_rand_vect1 - copy_rand_vect2)))
-    
+    copy_vect_rand = make_copy_vector(data_chunks_norm, group1_label_rand, group2_label_rand)
+    tvd_random = c(tvd_random, 0.5 * sum(abs(copy_vect_rand[[1]] - copy_vect_rand[[2]])))
   }
   wt = wilcox.test(tvd_random,mu = tvd)
   print(wt)
