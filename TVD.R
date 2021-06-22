@@ -37,12 +37,7 @@ for(record in tree_sliced){
 #Here I store all pairs of combination between nodes(groups) of the tree
 combn_nodes = combn(root_nodes, 2)
 
-#two vectors will store the real groups and the random generated ones
-list_group = c()
-list_group_random = c()
-
-                           
-
+#Function to calculate the copying vectors
 make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   #First I extract the matrix with the labels for each group
   group_matrix = data_chunks_norm[label_group1,]
@@ -64,8 +59,8 @@ make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   }
   return(list(copy_vector1,copy_vector2))
 }
+                        
                            
-                                                  
 for(i in seq(ncol(combn_nodes))){
   tree1 = extract.clade(ttree,combn_nodes[1,i])
   tree2 = extract.clade(ttree,combn_nodes[2,i])
