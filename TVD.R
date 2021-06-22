@@ -42,21 +42,26 @@ list_group = c()
 list_group_random = c()
 
                            
+
 make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   #First I extract the matrix with the labels for each group
   group_matrix = data_chunks_norm[label_group1,]
-  #I average by row
+  #First I average by row
   group_matrix_mean = apply(group_matrix,2,mean)
   #Then I sum all columns(Donors)
-  Donors_sum_group1 = sum(group_matrix_mean[label_group1])
-  Donors_sum_group2 = sum(group_matrix_mean[label_group2])
-  copy_vector1 = c(Donors_sum_group1, Donors_sum_group2)
-  
+  copy_vector1 = c()
+  for(tree in tree_sliced){
+      copy_vector1 = c(copy_vector1, sum(group_matrix_mean[tree$tip.label]))
+  }
+  #First I extract the matrix with the labels for each group
   group_matrix2 = data_chunks_norm[label_group2,]
+  #First I average by row
   group_matrix_mean2 = apply(group_matrix2,2,mean)
-  Donors_sum_group1 = sum(group_matrix_mean2[label_group1])
-  Donors_sum_group2 = sum(group_matrix_mean2[label_group2])
-  copy_vector2 = c(Donors_sum_group1, Donors_sum_group2)
+  #Then I sum all columns(Donors)
+  copy_vector2 = c()
+  for(tree in tree_sliced){
+    copy_vector2 = c(copy_vector2, sum(group_matrix_mean2[tree$tip.label]))
+  }
   return(list(copy_vector1,copy_vector2))
 }
                            
