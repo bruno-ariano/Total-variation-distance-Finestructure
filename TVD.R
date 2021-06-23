@@ -41,18 +41,16 @@ combn_nodes = combn(root_nodes, 2)
 make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   #First I extract the matrix with the labels for each group
   group_matrix = data_chunks_norm[label_group1,]
-  #First I average by row
+  #I average by row
   group_matrix_mean = apply(group_matrix,2,mean)
-  #Then I sum all columns(Donors)
+  #Then I sum accross Donors groups
   copy_vector1 = c()
   for(tree in tree_sliced){
       copy_vector1 = c(copy_vector1, sum(group_matrix_mean[tree$tip.label]))
   }
-  #First I extract the matrix with the labels for each group
+
   group_matrix2 = data_chunks_norm[label_group2,]
-  #First I average by row
   group_matrix_mean2 = apply(group_matrix2,2,mean)
-  #Then I sum all columns(Donors)
   copy_vector2 = c()
   for(tree in tree_sliced){
     copy_vector2 = c(copy_vector2, sum(group_matrix_mean2[tree$tip.label]))
@@ -67,7 +65,7 @@ for(i in seq(ncol(combn_nodes))){
   copy_vect = make_copy_vector(data_chunks_norm, tree1$tip.label, tree2$tip.label)
   tvd = 0.5 * sum(abs(copy_vect[[1]] - copy_vect[[2]]))
   
-  #I create 200 random groups by sampling from the two above ones. Depending on the clusters size you might want to increase the permutation number.
+  #I create 200 random groups by sampling from the two selected groups. Depending on the clusters size you might want to increase the permutation number.
   tvd_random = c()
   all_label = c(tree1$tip.label, tree2$tip.label)
   for(j in seq(200)){
