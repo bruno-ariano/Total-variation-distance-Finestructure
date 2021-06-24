@@ -40,7 +40,7 @@ combn_nodes = combn(root_nodes, 2)
 #Function to calculate the copying vectors
 make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   #First I extract the matrix with the labels for each group
-  group_matrix = data_chunks_norm[label_group1,]
+  group_matrix = matrix_chunk[label_group1,]
   #I average by row
   group_matrix_mean = apply(group_matrix,2,mean)
   #Then I sum accross Donors groups
@@ -49,7 +49,7 @@ make_copy_vector = function(matrix_chunk, label_group1, label_group2){
       copy_vector1 = c(copy_vector1, sum(group_matrix_mean[tree$tip.label]))
   }
 
-  group_matrix2 = data_chunks_norm[label_group2,]
+  group_matrix2 = matrix_chunk[label_group2,]
   group_matrix_mean2 = apply(group_matrix2,2,mean)
   copy_vector2 = c()
   for(tree in tree_sliced){
