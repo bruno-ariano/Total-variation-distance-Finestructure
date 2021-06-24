@@ -57,6 +57,12 @@ make_copy_vector = function(matrix_chunk, label_group1, label_group2){
   }
   return(list(copy_vector1,copy_vector2))
 }
+
+                           
+#All TVD values will be stored in a square matrix with row and col. names given by node label of the root
+tvd_matrix = matrix(rep(0,length(root_nodes)**2),nrow = length(root_nodes))
+colnames(tvd_matrix) = root_nodes
+rownames(tvd_matrix) = root_nodes
                         
                            
 for(i in seq(ncol(combn_nodes))){
@@ -76,4 +82,8 @@ for(i in seq(ncol(combn_nodes))){
   }
   wt = wilcox.test(tvd_random,mu = tvd)
   print(wt)
+  tvd_matrix[as.character(combn_nodes[1,i]),as.character(combn_nodes[2,i])] =tvd 
+  tvd_matrix[as.character(combn_nodes[2,i]),as.character(combn_nodes[1,i])] =tvd 
 }
+
+                           
