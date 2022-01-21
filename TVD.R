@@ -46,7 +46,7 @@ combn_nodes = combn(root_nodes, 2)
 make_copy_vector = function(matrix_chunk, label_group1, label_group2, root_nodes){
   #First I extract the matrix with the labels for each group
   group_matrix = matrix_chunk[label_group1,]
-  #First I average by row
+  #Then I average by row
   group_matrix_mean = apply(group_matrix,2,mean)
   #Then I sum all columns(Donors)
   copy_vector1 = c()
